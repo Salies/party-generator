@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gerador de Partidos Aleatórios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@saliesbox" />
+    <meta name="twitter:creator" content="@saliesbox" />
+    <meta property="og:url" content="https://saliesbox.com/partidos">
+    <meta property="og:title" content="Gerador de Partidos Aleatórios">
+    <meta property="og:site_name" content="SaliesBox">
+    <meta property="og:description" content="Descubra um bom nome de partido político brasileiro no incrível gerador!">
+    <meta property="og:image" content="https://imgur.com/MNpf7K8.png">
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Fredoka+One" rel="stylesheet">
+    <script src="script.js"></script>
+    <link rel="shortcut icon" type="image/png" href="fav.png">
+    <style>
+        body {
+            background: #009B3A;
+            overflow: hidden;
+        }
+
+        .wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .partido {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .partido span:nth-of-type(1) {
+            font-family: 'Alfa Slab One', cursive;
+            font-size: 4em;
+        }
+
+        .partido span:nth-of-type(2) {
+            display: inline-block;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2em;
+            margin-top: -15px;
+        }
+
+        .redes {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            min-height: 24px;
+        }
+
+        .label {
+            display: none;
+        }
+
+        .info {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .creditos {
+            display: none;
+            color: #fff;
+            font-family: 'Fredoka One', cursive;
+            font-size: 12px;
+            float: left;
+            margin-top: 3px;
+            margin-right: 10px;
+        }
+
+        .display {
+            display: block;
+        }
+
+        .twittSpan {
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+            background: url('faketweet.png');
+            overflow: hidden;
+            margin-right: 5px;
+        }
+
+        select,
+        button {
+            padding: 5px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.12';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div class="wrapper">
+        <section class="partido">
+            <span>PAL</span>
+            <br>
+            <span>Partido Anarquista Libertário</span>
+        </section>
+        <select>
+            <option value="1">1 Palavra</option>
+            <option value="2">2 Palavras</option>
+            <option value="3">3 Palavras</option>
+            <option value="4">4 Palavras</option>
+            <option value="5">5 Palavras</option>
+        </select>
+        <button onclick="gerar(document.querySelector('select').value)">Gerar!</button>
+    </div>
+
+    <div class="redes">
+        <span class="creditos">Gerador de Partidos Aleatórios - 2018. Feito por
+            <a href="https://github.com/salies" style="color:#fff;text-decoration: none;">Daniel Serezane</a>, idealizado por
+            <a href="https://github.com/salies" target="_blank">Daniel Serezane</a> e
+            <a href="https://www.artstation.com/vitorlopes" target="_blank">Vitor Lopes</a>.</span>
+        <img src="info.png" class="info">
+        <span class="twittSpan">
+            <a class="twitter-share-button" href='https://twitter.com/intent/tweet' data-url="https://saliesbox.com/partidos" data-text='Descobri o "PAL - Partido Anarquista Libertário" no Gerador de Partidos do @saliesbox! Descubra um partido brasileiro em'></a>
+        </span>
+        <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fsaliesbox.com%2Fpartidos&layout=button&size=small&mobile_iframe=true&width=97&height=20&appId"
+            width="97" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"
+            allow="encrypted-media"></iframe>
+    </div>
+
+    <script>
+        function gerar(n) {
+            let partido = geradores[n]();
+            if (n == 1) { //não === 1 pq tipo diferente (value é string)
+                document.querySelector('.partido span:nth-of-type(1)').innerHTML = partido.substring(0, 3).toUpperCase();
+            } else {
+                document.querySelector('.partido span:nth-of-type(1)').innerHTML = partido.split(' ').map(function (
+                    item) {
+                    return item[0]
+                }).join('');
+            }
+
+            document.querySelector('.partido span:nth-of-type(2)').innerHTML = partido;
+            document.querySelector('.twittSpan iframe').remove();
+            document.querySelector('.twittSpan').innerHTML =
+                `<a class="twitter-share-button" href='https://twitter.com/intent/tweet' data-url="https://saliesbox.com/partidos" data-text='Descobri o "${document.querySelector('.partido span:nth-of-type(1)').innerHTML} - ${document.querySelector('.partido span:nth-of-type(2)').innerHTML}" no Gerador de Partidos do @saliesbox! Descubra um partido brasileiro em'></a>`;
+            twttr.widgets.load();
+        }
+
+        document.querySelector('.info').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector('.creditos').classList.toggle('display');
+        });
+
+        window.twttr = (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+
+            t._e = [];
+            t.ready = function (f) {
+                t._e.push(f);
+            };
+
+            return t;
+        }(document, "script", "twitter-wjs"));
+    </script>
+</body>
+
+</html>
